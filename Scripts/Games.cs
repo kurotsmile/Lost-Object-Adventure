@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Games : MonoBehaviour
@@ -159,7 +157,7 @@ public class Games : MonoBehaviour
         this.s_id_item_shop = id_item;
         this.check_price_item_shop();
 
-        this.msg_shop=this.carrot.show_msg("Shop", "You can buy this item with gold coins, real money or watch ads to receive rewards");
+        this.msg_shop=this.carrot.Show_msg("Shop", "You can buy this item with gold coins, real money or watch ads to receive rewards");
         if (id_item != "item_coin") this.msg_shop.add_btn_msg(this.coin_buy_item_shop+" Coin",()=>this.act_coin_item_shop(id_item));
         this.msg_shop.add_btn_msg("Buy",()=>this.act_buy_item_shop(id_item));
         this.msg_shop.add_btn_msg("Watch ads", ()=>this.act_ads_item_shop(id_item));
@@ -205,7 +203,7 @@ public class Games : MonoBehaviour
             this.maps.minus_coin(this.coin_buy_item_shop);
         }
         else
-            this.msg_shop = this.carrot.show_msg("Shop", "You don't have enough gold coins to use this item, Collect more gold coins by searching or doing quests from game characters",Carrot.Msg_Icon.Alert);
+            this.msg_shop = this.carrot.Show_msg("Shop", "You don't have enough gold coins to use this item, Collect more gold coins by searching or doing quests from game characters",Carrot.Msg_Icon.Alert);
     }
 
     private void act_buy_item_shop(string id_item)
