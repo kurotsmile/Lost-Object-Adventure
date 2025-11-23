@@ -69,9 +69,9 @@ public class Map_Manager : MonoBehaviour
         this.load_data_item_found();
 
         this.coin = PlayerPrefs.GetInt("coin", 0);
-        this.count_obj_found = PlayerPrefs.GetInt("count_obj_found",0);
+        this.count_obj_found = PlayerPrefs.GetInt("count_obj_found", 0);
         this.count_specify = PlayerPrefs.GetInt("count_specify", 2);
-        this.count_highlight = PlayerPrefs.GetInt("count_highlight",1);
+        this.count_highlight = PlayerPrefs.GetInt("count_highlight", 1);
 
         this.map.set_active(false);
         this.update_ui_emp();
@@ -79,7 +79,7 @@ public class Map_Manager : MonoBehaviour
 
     private void Update()
     {
-        if (this.panel_npc_chat.activeInHierarchy&&this.is_effect_txt)
+        if (this.panel_npc_chat.activeInHierarchy && this.is_effect_txt)
         {
             this.timer_effect_txt += (3 * Time.deltaTime);
             if (this.timer_effect_txt > 0.1f)
@@ -87,14 +87,14 @@ public class Map_Manager : MonoBehaviour
                 this.count_txt_show_chat++;
                 if (this.count_txt_show_chat < this.s_msg_chat_npc.Length)
                 {
-                    this.txt_ui_chat_npc.text = this.s_msg_chat_npc.Substring(0, (int)this.count_txt_show_chat)+"_";
+                    this.txt_ui_chat_npc.text = this.s_msg_chat_npc.Substring(0, (int)this.count_txt_show_chat) + "_";
                 }
                 else
                 {
                     this.is_effect_txt = false;
                     this.txt_ui_chat_npc.text = this.s_msg_chat_npc;
                 }
-                this.timer_effect_txt=0;
+                this.timer_effect_txt = 0;
             }
         }
     }
@@ -137,15 +137,15 @@ public class Map_Manager : MonoBehaviour
     public void show_found(Obj_Item item_found)
     {
         this.obj_coin_found_panel.SetActive(false);
-        this.GetComponent<Games>().carrot.ads.show_ads_Interstitial();
+        this.GetComponent<Games>().ads.show_ads_Interstitial();
         this.create_effect(1, item_found.transform.position);
 
-        foreach(Transform tr_quest in this.tr_all_item_quest)
+        foreach (Transform tr_quest in this.tr_all_item_quest)
         {
             Quest_Item i_quest = tr_quest.GetComponent<Quest_Item>();
             if (i_quest.s_id == item_found.id_name)
             {
-                this.txt_count_coin_found.text = "+"+i_quest.coin_rewarded.ToString();
+                this.txt_count_coin_found.text = "+" + i_quest.coin_rewarded.ToString();
                 this.obj_coin_found_panel.SetActive(true);
                 i_quest.on_done();
                 this.add_coin(i_quest.coin_rewarded);
@@ -153,7 +153,7 @@ public class Map_Manager : MonoBehaviour
             }
         }
 
-        foreach(Transform tr in this.tr_all_body_tray)
+        foreach (Transform tr in this.tr_all_body_tray)
         {
             Tray_Item t = tr.GetComponent<Tray_Item>();
             if (t.txt_name.text == item_found.id_name)
@@ -168,7 +168,7 @@ public class Map_Manager : MonoBehaviour
         this.GetComponent<Games>().carrot.play_vibrate();
         this.panel_found.SetActive(true);
         this.count_obj_found++;
-        PlayerPrefs.SetInt("count_obj_found",this.count_obj_found);
+        PlayerPrefs.SetInt("count_obj_found", this.count_obj_found);
         this.txt_count_obj_found.text = count_obj_found.ToString();
         this.slider_total_obj_found.value = count_obj_found;
         this.scroll_rect_tray.horizontalNormalizedPosition = -1f;
@@ -179,7 +179,7 @@ public class Map_Manager : MonoBehaviour
     {
         this.max_obj_found = 0;
         this.GetComponent<Games>().carrot.clear_contain(this.tr_all_body_tray);
-        for(int i = 0; i < this.obj_found.Length; i++)
+        for (int i = 0; i < this.obj_found.Length; i++)
         {
             GameObject obj_tray = Instantiate(this.tray_item_prefab);
             obj_tray.transform.SetParent(this.tr_all_body_tray);
@@ -193,7 +193,7 @@ public class Map_Manager : MonoBehaviour
         }
 
         int index_item = 0;
-        foreach(Transform tr in this.tr_all_item_find)
+        foreach (Transform tr in this.tr_all_item_find)
         {
             tr.GetComponent<Obj_Item>().on_load(index_item);
             index_item++;
@@ -204,7 +204,7 @@ public class Map_Manager : MonoBehaviour
 
     public void set_active_all_npc(bool is_act)
     {
-        foreach(Transform tr in this.tr_all_npc)
+        foreach (Transform tr in this.tr_all_npc)
         {
             tr.gameObject.GetComponent<Npc>().set_active(is_act);
         }
@@ -244,10 +244,10 @@ public class Map_Manager : MonoBehaviour
         foreach (Transform tr in this.tr_all_body_tray)
         {
             Tray_Item tray = tr.GetComponent<Tray_Item>();
-            Carrot.Carrot_Box_Item i_item=box_items.create_item("item_box_" + tray.txt_name.text);
+            Carrot.Carrot_Box_Item i_item = box_items.create_item("item_box_" + tray.txt_name.text);
             i_item.set_icon_white(tray.img_icon.sprite);
             i_item.set_title(tray.txt_name.text);
-            i_item.set_tip(tray.get_count_item()+"/"+tray.get_max_item());
+            i_item.set_tip(tray.get_count_item() + "/" + tray.get_max_item());
         }
 
         box_items.set_act_before_closing(this.act_close_box_items);
@@ -274,11 +274,11 @@ public class Map_Manager : MonoBehaviour
     {
         foreach (Transform tr in this.tr_all_item_find)
         {
-            this.create_effect(2, new Vector3(tr.position.x, tr.position.y, tr.position.z + 0.05f),2f);
+            this.create_effect(2, new Vector3(tr.position.x, tr.position.y, tr.position.z + 0.05f), 2f);
         }
 
         this.count_highlight--;
-        PlayerPrefs.SetInt("count_highlight",this.count_highlight);
+        PlayerPrefs.SetInt("count_highlight", this.count_highlight);
         this.update_ui_emp();
     }
 
@@ -296,7 +296,7 @@ public class Map_Manager : MonoBehaviour
         this.update_ui_emp();
     }
 
-    public void create_effect(int index,Vector3 pos,float timer_destroy=2f)
+    public void create_effect(int index, Vector3 pos, float timer_destroy = 2f)
     {
         GameObject obj_effect = Instantiate(this.effect_prefab[index]);
         obj_effect.transform.SetParent(this.transform);
@@ -309,13 +309,13 @@ public class Map_Manager : MonoBehaviour
     {
         this.is_effect_txt = true;
         this.count_txt_show_chat = 0;
-        this.s_msg_chat_npc= this.get_chat_msg_npc_ui();
+        this.s_msg_chat_npc = this.get_chat_msg_npc_ui();
         this.coin_get_rewarded = Random.Range(3, 10);
         this.item_quest_show = this.get_item_quest_random();
         this.img_avatar_npc_chat.sprite = npc.sp_avatar[0];
         this.txt_name_chat_npc.text = npc.id_name;
         this.txt_ui_chat_npc.text = "";
-        this.txt_coin_get_rewarded_npc.text = "+"+this.coin_get_rewarded.ToString()+" Coin";
+        this.txt_coin_get_rewarded_npc.text = "+" + this.coin_get_rewarded.ToString() + " Coin";
         this.img_item_npc_chat.sprite = this.item_quest_show.img_icon.sprite;
         this.on_pause();
         this.GetComponent<Games>().carrot.play_sound_click();
@@ -347,7 +347,7 @@ public class Map_Manager : MonoBehaviour
     {
         List<Tray_Item> list_item_tray = new List<Tray_Item>();
 
-        foreach(Transform tr in this.tr_all_body_tray)
+        foreach (Transform tr in this.tr_all_body_tray)
         {
             Tray_Item tray_check = tr.GetComponent<Tray_Item>();
             if (!tray_check.is_quest) list_item_tray.Add(tray_check);
@@ -357,7 +357,7 @@ public class Map_Manager : MonoBehaviour
         return list_item_tray[index_rand];
     }
 
-    public void add_Quest_Item(Tray_Item item_show,int coin_get_rewarded)
+    public void add_Quest_Item(Tray_Item item_show, int coin_get_rewarded)
     {
         item_show.is_quest = true;
         GameObject obj_quest = Instantiate(this.quest_item_prefab);
@@ -366,7 +366,7 @@ public class Map_Manager : MonoBehaviour
         obj_quest.transform.localScale = new Vector3(1f, 1f, 1f);
 
         Quest_Item q = obj_quest.GetComponent<Quest_Item>();
-        q.on_load(item_show.txt_name.text,item_show, coin_get_rewarded);
+        q.on_load(item_show.txt_name.text, item_show, coin_get_rewarded);
         q.img_icon.sprite = item_show.img_icon.sprite;
     }
 

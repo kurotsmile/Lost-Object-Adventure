@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class Games : MonoBehaviour
 {
+    [Header("Main Object")]
     public Carrot.Carrot carrot;
+    public IronSourceAds ads;
+
     public Map_Manager maps;
     public AudioSource[] sound;
 
@@ -27,9 +30,14 @@ public class Games : MonoBehaviour
     {
         this.carrot.Load_Carrot(this.check_exit_app);
         this.carrot.shop.onCarrotPaySuccess += this.act_buy_success;
-        this.carrot.ads.onRewardedSuccess += this.onRewardedSuccess;
         this.carrot.game.load_bk_music(this.sound[0]);
         this.maps.on_load();
+
+        carrot.act_after_delete_all_data = Start;
+        ads.On_Load();
+        carrot.game.act_click_watch_ads_in_music_bk = this.ads.ShowRewardedVideo;
+        ads.onRewardedSuccess += carrot.game.OnRewardedSuccess;
+        this.ads.onRewardedSuccess += this.onRewardedSuccess;
 
         this.panel_home.SetActive(true);
         this.panel_play.SetActive(false);
@@ -79,15 +87,15 @@ public class Games : MonoBehaviour
 
     public void btn_setting()
     {
-        this.carrot.ads.Destroy_Banner_Ad();
+        this.ads.HideBannerAd();
         this.maps.on_pause();
-        Carrot.Carrot_Box box_setting=this.carrot.Create_Setting();
+        Carrot.Carrot_Box box_setting = this.carrot.Create_Setting();
         box_setting.set_act_before_closing(act_close_setting);
     }
 
     private void act_close_setting()
     {
-        this.carrot.ads.create_banner_ads();
+        this.ads.ShowBannerAd();
         this.maps.un_pause();
     }
 
@@ -123,16 +131,16 @@ public class Games : MonoBehaviour
 
     public void btn_shop()
     {
-        this.carrot.ads.Destroy_Banner_Ad();
+        this.ads.HideBannerAd();
         this.maps.on_pause();
-        box_shop=this.carrot.Create_Box("Shop");
+        box_shop = this.carrot.Create_Box("Shop");
         box_shop.set_icon(this.sp_icon_shop);
 
-        Carrot.Carrot_Box_Item item_shop_search=box_shop.create_item("item_search");
+        Carrot.Carrot_Box_Item item_shop_search = box_shop.create_item("item_search");
         item_shop_search.set_icon(this.sp_icon_shop_search);
         item_shop_search.set_title("Magnifying Glass");
         item_shop_search.set_tip("Specify an object you are looking for");
-        item_shop_search.set_act(()=>this.sel_shop_item("item_search"));
+        item_shop_search.set_act(() => this.sel_shop_item("item_search"));
         this.create_btn_other_item_shop(item_shop_search);
 
         Carrot.Carrot_Box_Item item_shop_highlight = box_shop.create_item("item_highlight");
@@ -157,10 +165,10 @@ public class Games : MonoBehaviour
         this.s_id_item_shop = id_item;
         this.check_price_item_shop();
 
-        this.msg_shop=this.carrot.Show_msg("Shop", "You can buy this item with gold coins, real money or watch ads to receive rewards");
-        if (id_item != "item_coin") this.msg_shop.add_btn_msg(this.coin_buy_item_shop+" Coin",()=>this.act_coin_item_shop(id_item));
-        this.msg_shop.add_btn_msg("Buy",()=>this.act_buy_item_shop(id_item));
-        this.msg_shop.add_btn_msg("Watch ads", ()=>this.act_ads_item_shop(id_item));
+        this.msg_shop = this.carrot.Show_msg("Shop", "You can buy this item with gold coins, real money or watch ads to receive rewards");
+        if (id_item != "item_coin") this.msg_shop.add_btn_msg(this.coin_buy_item_shop + " Coin", () => this.act_coin_item_shop(id_item));
+        this.msg_shop.add_btn_msg("Buy", () => this.act_buy_item_shop(id_item));
+        this.msg_shop.add_btn_msg("Watch ads", () => this.act_ads_item_shop(id_item));
     }
 
     private void check_price_item_shop()
@@ -186,7 +194,7 @@ public class Games : MonoBehaviour
         btn_buy.set_color(this.carrot.color_highlight);
         btn_buy.set_act(() => this.act_buy_item_shop(s_id_item));
 
-        Carrot.Carrot_Box_Btn_Item btn_ads=item.create_item();
+        Carrot.Carrot_Box_Btn_Item btn_ads = item.create_item();
         btn_ads.set_icon(this.sp_icon_shop_ads);
         btn_ads.set_color(this.carrot.color_highlight);
         btn_ads.set_act(() => this.act_ads_item_shop(s_id_item));
@@ -203,7 +211,7 @@ public class Games : MonoBehaviour
             this.maps.minus_coin(this.coin_buy_item_shop);
         }
         else
-            this.msg_shop = this.carrot.Show_msg("Shop", "You don't have enough gold coins to use this item, Collect more gold coins by searching or doing quests from game characters",Carrot.Msg_Icon.Alert);
+            this.msg_shop = this.carrot.Show_msg("Shop", "You don't have enough gold coins to use this item, Collect more gold coins by searching or doing quests from game characters", Carrot.Msg_Icon.Alert);
     }
 
     private void act_buy_item_shop(string id_item)
@@ -215,12 +223,12 @@ public class Games : MonoBehaviour
     private void act_ads_item_shop(string id_item)
     {
         this.s_id_item_shop_adsRewarded = id_item;
-        this.carrot.ads.show_ads_Rewarded();
+        this.ads.ShowRewardedVideo();
     }
 
     private void act_close_shop()
     {
-        this.carrot.ads.create_banner_ads();
+        this.ads.ShowBannerAd();
         this.maps.un_pause();
     }
 
