@@ -35,6 +35,8 @@ public class Games : MonoBehaviour
 
         carrot.act_after_delete_all_data = Start;
         ads.On_Load();
+        this.carrot.act_buy_ads_success=this.ads.RemoveAds;
+        
         carrot.game.act_click_watch_ads_in_music_bk = this.ads.ShowRewardedVideo;
         ads.onRewardedSuccess += carrot.game.OnRewardedSuccess;
         this.ads.onRewardedSuccess += this.onRewardedSuccess;
